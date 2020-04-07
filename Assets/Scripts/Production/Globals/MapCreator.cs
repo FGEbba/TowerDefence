@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 namespace MapCreation
 {
     public class MapData
@@ -15,17 +17,17 @@ namespace MapCreation
         public GameObject tilePrefab { get; private set; }
     }
 
-    public class MapReader : MonoBehaviour
-
-
+    public class MapCreator : MonoBehaviour
     {
+
+        private static List<Vector3> accessableTiles = new List<Vector3>();
+        public static Vector3 start { get; private set; }
+        public static Vector3 end { get; private set; }
+
         private static Dictionary<int, int[]> theMap = new Dictionary<int, int[]>();
         public static int BlockSize { get; private set; }
-        public static Dictionary<int, int[]> GetMapDictionary()
-        {
-            return theMap;
-        }
-
+        public static Dictionary<int, int[]> GetMapDictionary() { return theMap; }
+        public static List<Vector3> GetAccessableTiles() { return accessableTiles; }
         #region Checkers
         public static List<MapData> CheckDataMaps(MapDataExposed[] mapDatas)
         {
@@ -61,6 +63,11 @@ namespace MapCreation
             SpawnMap(data, Files.FileReader.m_mapWidth);
         }
 
+        private static void CreateEnemyPath(float x, float z)
+        {
+            accessableTiles.Add(new Vector3(x * BlockSize, 0, z * BlockSize));
+        }
+
         private static void SpawnMap(List<MapData> data, int mapWidth)
         {
             int mapLength = theMap.Count;
@@ -71,11 +78,17 @@ namespace MapCreation
                     GameObject currentTilePrefab = null;
                     TileType currentTileType;
                     TileMethods.TypeById.TryGetValue(theMap[iRun][j], out currentTileType);
-
                     foreach (MapData mapData in data)
                     {
                         if (mapData.tileType.Equals(currentTileType))
                         {
+                            if (TileMethods.IsWalkable(currentTileType))
+                            {
+                                CreateEnemyPath(j, i);
+                                if (currentTileType == TileType.Start) { start = new Vector3(j * BlockSize, 0, i * BlockSize); }
+                                if (currentTileType == TileType.End) { end = new Vector3(j * BlockSize, 0, i * BlockSize); }
+
+                            }
                             currentTilePrefab = mapData.tilePrefab;
                             SpawnTile(currentTilePrefab, j, i, currentTileType);
                             break;
@@ -93,9 +106,11 @@ namespace MapCreation
 
         private static void SpawnTile(GameObject currentTilePrefab, int coloumn, int row, TileType currentTileType)
         {
-            GameObject spawnedTile = Instantiate(currentTilePrefab, new Vector3(coloumn * BlockSize, 0, row * BlockSize), Quaternion.identity);
-            spawnedTile.transform.localScale *= 0.5f * BlockSize;
+            GameObject spawnedTile = Instantiate(currentTilePrefab, new Vector3(0, 0, 0), Quaternion.identity);
             spawnedTile.transform.parent = GameObject.Find("Map" + FindParent(currentTileType)).transform;
+            spawnedTile.transform.localScale *= 0.5f * BlockSize;
+            spawnedTile.transform.localPosition += spawnedTile.transform.forward * coloumn * BlockSize;
+            spawnedTile.transform.localPosition += spawnedTile.transform.right *row * BlockSize * -1;
 
         }
 

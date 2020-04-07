@@ -9,54 +9,51 @@ namespace Enemies
 
     public class EnemyManager : MonoBehaviour
     {
-        private static List<Enemy> enemies = new List<Enemy>();
-        private static Dictionary<int, int> waves = new Dictionary<int, int>();
+        public static bool waveEnd { get; private set; }
 
-        private static List<Vector3> accessableTiles = new List<Vector3>();
-        private static Vector3 start, end;
+        private static Dictionary<int, KeyValuePair<int, int>> waves = new Dictionary<int, KeyValuePair<int, int>>();
 
+        private static List<Vector2Int> accessableTiles = new List<Vector2Int>();
+        private static Vector2Int start, end;
+        private static List<Vector2Int> path;
 
-        private void Update()
+        public static void GetWaves()
         {
+            Dictionary<int, int> allWaves = MapCreation.MapManager.GetWavesFromFile();
 
-        }
-
-        public static void CheckEnemyPrefabs(GameObject[] prefabList)
-        {
-            if (prefabList.Length < 1) { throw new NullReferenceException("The prefab map is empty! Fill them with info."); }
-        }
-
-        //Funks!
-        public static void GetWavesFromFile()
-        {
-            waves = Files.FileReader.GetWavesFileContent(Files.FileReader.ReadMapFile());
-            foreach (KeyValuePair<int, int> currentWave in waves)
+            int i = 0;
+            foreach (KeyValuePair<int, int> wave in allWaves)
             {
-                Debug.Log($"Unit 1: {currentWave.Key}, Unit 2: {currentWave.Value}");
+                waves.Add(i, wave);
+                i++;
             }
         }
-
-        public static void FindPathFromMap()
+        public static void GetPath()
         {
-            Dictionary<int, int[]> theMap = new Dictionary<int, int[]>();
-            theMap = MapCreation.MapReader.GetMapDictionary();
+            accessableTiles = MapCreation.MapManager.AccessableTilesConverter(MapCreation.MapManager.GetPathVec3());
+            start = MapCreation.MapManager.ConvertVec3PosToVec2int(MapCreation.MapCreator.start);
+            end = MapCreation.MapManager.ConvertVec3PosToVec2int(MapCreation.MapCreator.end);
+        }
 
-            int mapLength = Files.FileReader.m_mapLenght;
-            int mapWidth = Files.FileReader.m_mapWidth;
-
-            for (int iRun = mapLength - 1, i = 0; iRun >= 0; iRun--, i++)
+        public static void SpawnWave(Tools.GameObjectPool smallPool, Tools.GameObjectPool bigPool, int waveNumber)
+        {
+            if (waveNumber > waves.Count - 1)
             {
-                for (int j = 0; j < mapWidth; j++)
+                waveEnd = true;
+            }
+            foreach (KeyValuePair<int, KeyValuePair<int, int>> wave in waves)
+            {
+                if (wave.Key == waveNumber)
                 {
-                    TileType currentTileType;
-                    TileMethods.TypeById.TryGetValue(theMap[iRun][j], out currentTileType);
-                    if (TileMethods.IsWalkable(currentTileType))
+                    for (int i = 0; i < wave.Value.Key; i++)
                     {
-                        accessableTiles.Add(new Vector3(j * MapCreation.MapReader.BlockSize, 0, i * MapCreation.MapReader.BlockSize));
-
-                        if (currentTileType == TileType.Start) { start = new Vector3(j * MapCreation.MapReader.BlockSize, 0, i * MapCreation.MapReader.BlockSize); }
-                        if (currentTileType == TileType.End) { end = new Vector3(j * MapCreation.MapReader.BlockSize, 0, i * MapCreation.MapReader.BlockSize); }
+                        SpawnUnits(smallPool);
                     }
+                    for (int i = 0; i < wave.Value.Value; i++)
+                    {
+                        SpawnUnits(bigPool);
+                    }
+                    break;
                 }
             }
 
@@ -65,14 +62,21 @@ namespace Enemies
         public static void DoTheDijkstra()
         {
             AI.IPathFinder pathFinder = new AI.Dijkstra(accessableTiles);
-            IEnumerable<Vector3> path = pathFinder.FindPath(start, end);
+            path = (List<Vector2Int>)pathFinder.FindPath(start, end);
         }
 
-        public static List<Vector3> GetAccessableTiles()
+        public static void SpawnUnits(Tools.GameObjectPool pool)
         {
-            return accessableTiles;
-        }
+            GameObject enemy = pool.Rent(false);
+            EnemyController enemyComponent = enemy.GetComponent<EnemyController>();
 
+            enemy.transform.position = Vector3.zero;
+
+            enemy.SetActive(true);
+            enemyComponent.ResetUnit(path, start);
+
+
+        }
 
     }
 

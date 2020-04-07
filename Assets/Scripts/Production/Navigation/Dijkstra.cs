@@ -9,12 +9,12 @@ namespace AI
     public class Dijkstra : IPathFinder
     {
 
-        private List<Vector3> _Map;
+        private List<Vector2Int> _Map;
 
         class Node
         {
             public Node() {}
-            public Node(int steps, Vector3 position, Node _prevNode)
+            public Node(int steps, Vector2Int position, Node _prevNode)
             {
                 stepsTaken = steps;
                 currentPos = position;
@@ -22,24 +22,24 @@ namespace AI
             }
 
             public int stepsTaken;
-            public Vector3 currentPos;
+            public Vector2Int currentPos;
             public Node previous;
 
 
         }
 
 
-        public Dijkstra(List<Vector3> _Accessables)
+        public Dijkstra(List<Vector2Int> _Accessables)
         {
             _Map = _Accessables;
         }
 
-        public IEnumerable<Vector3> FindPath(Vector3 start, Vector3 goal)
+        public IEnumerable<Vector2Int> FindPath(Vector2Int start, Vector2Int goal)
         {
             Node currentNode = new Node();
             currentNode.stepsTaken = 0;
             currentNode.currentPos = start;
-            List<Vector3> searched = new List<Vector3>();
+            List<Vector2Int> searched = new List<Vector2Int>();
             Queue<Node> searchList = new Queue<Node>();
 
             bool goalFound = false;
@@ -48,7 +48,7 @@ namespace AI
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    Vector3 searchNode = currentNode.currentPos + Tools.DirectionTools.Dirs[i];
+                    Vector2Int searchNode = currentNode.currentPos + Tools.DirectionTools.Dirs[i];
                     if (searchNode == goal) { goalFound = true; }
                     if ((_Map.Contains(searchNode) || goalFound) && !searched.Contains(searchNode))
                     {
@@ -62,7 +62,7 @@ namespace AI
                 if (!goalFound)
                 {
                     if (searchList.Count > 0) { currentNode = searchList.Dequeue(); }
-                    else { return Enumerable.Empty<Vector3>(); }
+                    else { return Enumerable.Empty<Vector2Int>(); }
                 }
 
             }

@@ -5,6 +5,6 @@ namespace AI
 {
     public interface IPathFinder
     {
-        IEnumerable<Vector3> FindPath(Vector3 start, Vector3 goal);
+        IEnumerable<Vector2Int> FindPath(Vector2Int start, Vector2Int goal);
     }
 }
