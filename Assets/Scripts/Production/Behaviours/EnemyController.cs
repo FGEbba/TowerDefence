@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Tools;
 
 namespace Enemies
 {
@@ -43,6 +44,7 @@ namespace Enemies
             }
             else
             {
+                transform.gameObject.SetActive(false);
                 
             }
 

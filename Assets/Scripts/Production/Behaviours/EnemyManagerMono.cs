@@ -28,7 +28,7 @@ namespace Enemies
             m_EnemyPoolSmall = new Tools.GameObjectPool(1, m_prefabSmall);
             m_EnemyPoolBig = new Tools.GameObjectPool(1, m_prefabBig);
 
-            InvokeRepeating("Waves", 0, 10);
+            InvokeRepeating("Waves", 0, 20);
         }
 
         public void Waves()
