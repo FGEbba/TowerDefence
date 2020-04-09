@@ -500,3 +500,4 @@ MonoBehaviour:
     type: 3}
   m_prefabBig: {fileID: 6886636200837411539, guid: 5d546f9a4878a2149bd8d5f53e305c27,
     type: 3}
+  m_unitTimer: 1

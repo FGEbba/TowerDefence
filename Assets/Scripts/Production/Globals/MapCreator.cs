@@ -108,9 +108,10 @@ namespace MapCreation
         {
             GameObject spawnedTile = Instantiate(currentTilePrefab, new Vector3(0, 0, 0), Quaternion.identity);
             spawnedTile.transform.parent = GameObject.Find("Map" + FindParent(currentTileType)).transform;
+            spawnedTile.transform.position += spawnedTile.transform.forward * coloumn * BlockSize;
+            spawnedTile.transform.position += spawnedTile.transform.right * row * BlockSize * -1;
+
             spawnedTile.transform.localScale *= 0.5f * BlockSize;
-            spawnedTile.transform.localPosition += spawnedTile.transform.forward * coloumn * BlockSize;
-            spawnedTile.transform.localPosition += spawnedTile.transform.right *row * BlockSize * -1;
 
         }
 

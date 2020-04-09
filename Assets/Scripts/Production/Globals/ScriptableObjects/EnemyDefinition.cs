@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 namespace Scriptable
 {
 
-    [CreateAssetMenu(fileName = "Data", menuName = "SpawnableEnemy", order = 51)]
+    [CreateAssetMenu(fileName = "Data", menuName = "Boxymon", order = 51)]
     public class EnemyDefinition : ScriptableObject
     {
         [SerializeField]
@@ -27,5 +25,7 @@ namespace Scriptable
         public GameObject EnemyPrefab { get { return enemyPrefab; } }
 
     }
+
+
 
 }

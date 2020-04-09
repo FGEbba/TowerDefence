@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Tools;
 
 namespace Enemies
 {
 
-    public class EnemyController : MonoBehaviour
+    public class EnemyController : MonoBehaviour, IHealth
     {
         [SerializeField]
         private Scriptable.EnemyDefinition enemyData;
@@ -17,18 +16,33 @@ namespace Enemies
         private int enemyHealth;
         private float enemySpeed;
         private int enemyAttack;
+        private int block;
 
-        public void ResetUnit(List<Vector2Int> path, Vector2Int start)
+        private Rigidbody rb;
+        private bool scaled = false;
+
+        private void OnEnable()
+        {
+            //rb = GetComponent<Rigidbody>();
+        }
+
+        public void ResetUnit(List<Vector2Int> path, Vector2Int start, int blockSize)
         {
             m_path = path;
+            transform.gameObject.SetActive(true);
+            block = blockSize;
+
+            if (!scaled) { transform.localScale *= 0.5f * block; scaled = true; }
+
             enemySpeed = enemyData.EnemySpeed;
             enemyHealth = enemyData.EnemyMaxHealth;
             enemyAttack = enemyData.EnemyAttack;
-
+            pathIndex = 0;
 
             transform.position = Vector3.zero;
             transform.localPosition += transform.forward * start.x;
             transform.localPosition += transform.right * start.y * -1;
+            transform.localPosition += transform.up * transform.localScale.y;
 
             InvokeRepeating("Move", 0, enemySpeed);
         }
@@ -41,19 +55,27 @@ namespace Enemies
                 transform.position = Vector3.zero;
                 transform.localPosition += transform.forward * m_path[pathIndex].x;
                 transform.localPosition += transform.right * m_path[pathIndex].y * -1;
-            }
-            else
-            {
-                transform.gameObject.SetActive(false);
-                
-            }
 
+                transform.localPosition += transform.up * transform.localScale.y;
+            }
         }
 
-        public void Attack()
+        private void OnCollisionEnter(Collision collision)
         {
-
+            IHealth otherCompHealth = (IHealth)collision.gameObject.GetComponent(typeof(IHealth));
+            if (otherCompHealth != null)
+            {
+                otherCompHealth.Damage(enemyAttack);
+                CancelInvoke();
+                transform.gameObject.SetActive(false);
+            }
         }
+        
 
+
+        public void Damage(int damageTaken)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

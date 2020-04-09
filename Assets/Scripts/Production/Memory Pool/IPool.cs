@@ -22,7 +22,7 @@ namespace Tools
             m_Prefab = prefab;
             m_Parent = parent;
             m_Prefab.SetActive(false);
-            Expand((uint) Mathf.Max(1, initSize));
+            //Expand((uint) Mathf.Max(1, initSize));
         }
 
         private void Expand(uint amount)

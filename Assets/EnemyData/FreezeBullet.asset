@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c51106b92e64ee42bb08f8c569dc11e, type: 3}
-  m_Name: Enemy_Big
+  m_Script: {fileID: 11500000, guid: 882cfce70186357439d0fc98e350eaa7, type: 3}
+  m_Name: FreezeBullet
   m_EditorClassIdentifier: 
-  enemyMaxHealth: 20
-  enemySpeed: 0.25
-  enemyAttack: 3
-  enemyPrefab: {fileID: 6886636200837411539, guid: 5d546f9a4878a2149bd8d5f53e305c27,
-    type: 3}
+  damage: 0
+  bulletType: 0
+  maxBulletSpeed: 0
+  minBulletSpeed: 0
