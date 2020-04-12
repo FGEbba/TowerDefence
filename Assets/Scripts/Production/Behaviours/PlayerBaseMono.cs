@@ -13,6 +13,9 @@ public class PlayerBaseMono : MonoBehaviour, IHealth
     private int currentHealth;
 
     private Rigidbody rb;
+    private bool dead;
+
+    public bool Dead { get { return dead; } set { dead = value; } }
     private void Start()
     {
         currentHealth = m_MaxHealth;
@@ -22,5 +25,6 @@ public class PlayerBaseMono : MonoBehaviour, IHealth
     public void Damage(int damageTaken)
     {
         currentHealth -= damageTaken;
+        if (currentHealth <= 0) { dead = true; }
     }
 }

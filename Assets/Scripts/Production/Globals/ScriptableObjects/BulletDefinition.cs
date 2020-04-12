@@ -12,16 +12,18 @@ namespace Scriptable
         private int damage;
 
         [SerializeField]
-        private Shit bulletType;
+        private BulletTypes bulletType;
 
         [SerializeField]
-        private float maxBulletSpeed;
+        private float bulletSpeed;
 
-        [SerializeField]
-        private float minBulletSpeed;
+
+        public int Damage { get { return damage; } }
+        public BulletTypes BulletType { get { return bulletType; } }
+        public float BulletSpeed { get { return bulletSpeed; } }
     }
 
-    public enum Shit
+    public enum BulletTypes
     {
         Freeze,
         AreaDamage

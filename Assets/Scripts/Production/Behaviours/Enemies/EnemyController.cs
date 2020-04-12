@@ -16,24 +16,28 @@ namespace Enemies
         private int enemyHealth;
         private float enemySpeed;
         private int enemyAttack;
-        private int block;
 
         private Rigidbody rb;
+        private Animator anim;
         private bool scaled = false;
+
+        private bool dead = false;
+        bool IHealth.Dead { get { return dead; } set { dead = value; } }
 
         private void OnEnable()
         {
-            //rb = GetComponent<Rigidbody>();
+            if (rb == null) { rb = GetComponent<Rigidbody>(); }
+            if (anim == null) { anim = GetComponent<Animator>(); }
         }
 
         public void ResetUnit(List<Vector2Int> path, Vector2Int start, int blockSize)
         {
             m_path = path;
             transform.gameObject.SetActive(true);
-            block = blockSize;
 
-            if (!scaled) { transform.localScale *= 0.5f * block; scaled = true; }
+            if (!scaled) { transform.localScale *= 0.5f * blockSize; scaled = true; }
 
+            dead = false;
             enemySpeed = enemyData.EnemySpeed;
             enemyHealth = enemyData.EnemyMaxHealth;
             enemyAttack = enemyData.EnemyAttack;
@@ -45,12 +49,14 @@ namespace Enemies
             transform.localPosition += transform.up * transform.localScale.y;
 
             InvokeRepeating("Move", 0, enemySpeed);
+            anim.SetBool("isWalking", true);
         }
 
         private void Move()
         {
             if (pathIndex < m_path.Count - 1)
             {
+                //Rotate the enemy towards the next "block"
                 pathIndex++;
                 transform.position = Vector3.zero;
                 transform.localPosition += transform.forward * m_path[pathIndex].x;
@@ -70,12 +76,28 @@ namespace Enemies
                 transform.gameObject.SetActive(false);
             }
         }
-        
+
 
 
         public void Damage(int damageTaken)
         {
-            throw new System.NotImplementedException();
+            anim.SetTrigger("Damaged");
+
+            enemyHealth -= damageTaken;
+
+            if (enemyHealth <= 0)
+            {
+                //I dunno man
+                dead = true;
+                CancelInvoke();
+                anim.SetTrigger("Killed");
+                while (anim.GetCurrentAnimatorStateInfo(0).IsName("Dead") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+                { Debug.Log("Dead"); }
+
+                transform.gameObject.SetActive(false);
+            }
+
         }
+
     }
 }

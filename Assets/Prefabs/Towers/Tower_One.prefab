@@ -7,20 +7,47 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 857449883946895019, guid: 9058376e4a8804756acc0e60103feae4,
+        type: 3}
+      propertyPath: m_BulletType
+      value: 
+      objectReference: {fileID: 6049153549723787451, guid: 9368ee34775169b4585159c1ae9f7eb3,
+        type: 3}
+    - target: {fileID: 857449883946895019, guid: 9058376e4a8804756acc0e60103feae4,
+        type: 3}
+      propertyPath: m_BulletPrefab
+      value: 
+      objectReference: {fileID: 6049153549723787451, guid: 9368ee34775169b4585159c1ae9f7eb3,
+        type: 3}
+    - target: {fileID: 857449883946895019, guid: 9058376e4a8804756acc0e60103feae4,
+        type: 3}
+      propertyPath: m_BulletSpawnPoint
+      value: 
+      objectReference: {fileID: 2098555135051281632}
+    - target: {fileID: 857449883946895019, guid: 9058376e4a8804756acc0e60103feae4,
+        type: 3}
+      propertyPath: m_ShootSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1322663929053664657, guid: 9058376e4a8804756acc0e60103feae4,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1430611518195826670, guid: 9058376e4a8804756acc0e60103feae4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -3.0343938
       objectReference: {fileID: 0}
     - target: {fileID: 1430611518195826670, guid: 9058376e4a8804756acc0e60103feae4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 7.6705513
       objectReference: {fileID: 0}
     - target: {fileID: 1430611518195826670, guid: 9058376e4a8804756acc0e60103feae4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 6.599847
       objectReference: {fileID: 0}
     - target: {fileID: 1430611518195826670, guid: 9058376e4a8804756acc0e60103feae4,
         type: 3}
@@ -79,3 +106,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9058376e4a8804756acc0e60103feae4, type: 3}
+--- !u!1 &2098555135051281632 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7553907597991888725, guid: 9058376e4a8804756acc0e60103feae4,
+    type: 3}
+  m_PrefabInstance: {fileID: 8487963920607474613}
+  m_PrefabAsset: {fileID: 0}

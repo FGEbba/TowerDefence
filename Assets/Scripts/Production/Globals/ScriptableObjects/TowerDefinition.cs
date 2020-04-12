@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace Scriptable
 {
-
-
     public class TowerDefinition : ScriptableObject
     {
 

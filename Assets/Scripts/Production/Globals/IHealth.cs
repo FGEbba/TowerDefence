@@ -6,4 +6,5 @@ using UnityEngine;
 public interface IHealth
 {
     void Damage(int damageTaken);
+    bool Dead { get; set; }
 }

@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Enemies
 {
-
-
     public class EnemyManagerMono : MonoBehaviour
     {
         [SerializeField]
@@ -17,7 +13,7 @@ namespace Enemies
         [SerializeField]
         private int m_unitTimer;
 
-        
+
         private void Start()
         {
             EnemyManager.GetPath();

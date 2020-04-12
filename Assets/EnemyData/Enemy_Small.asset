@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_Small
   m_EditorClassIdentifier: 
   enemyMaxHealth: 10
-  enemySpeed: 0.2
+  enemySpeed: 1
   enemyAttack: 1
   enemyPrefab: {fileID: 4367056164819846383, guid: 29a05421288783043911cef79fb12d86,
     type: 3}

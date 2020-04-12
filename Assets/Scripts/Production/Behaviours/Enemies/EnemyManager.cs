@@ -74,13 +74,11 @@ namespace Enemies
                     currentWave++;
                 }
             }
-            else
-            {
-                SpawnWave();
-            }
+            else { SpawnWave(); }
 
 
         }
+
 
         public static void SpawnWave()
         {
@@ -88,32 +86,29 @@ namespace Enemies
             {
                 if (smallEnemiesInCurrentWave < waves[currentWave].Key)
                 {
-                    SpawnUnit(smallEnemyPool);
+                    SpawnUnit(smallEnemyPool, "small");
                     smallEnemiesInCurrentWave++;
-                    Debug.Log($"smalls: {smallEnemiesInCurrentWave}/{waves[currentWave].Key}");
                 }
                 if (bigEnemiesInCurrentWave < waves[currentWave].Value)
                 {
-                    SpawnUnit(bigEnemyPool);
+                    SpawnUnit(bigEnemyPool, "big");
                     bigEnemiesInCurrentWave++;
-                    Debug.Log($"Bigs: {bigEnemiesInCurrentWave}/{waves[currentWave].Value}");
                 }
 
                 //Just to make sure everything spawns correctly.
                 else if ((smallEnemiesInCurrentWave + bigEnemiesInCurrentWave) == (waves[currentWave].Key + waves[currentWave].Value))
                 {
                     waveComplete = true;
-                    Debug.Log($"CurrentWave: {currentWave}, SmallUnits: {waves[currentWave].Key}, BigUnits: {waves[currentWave].Value}");
-
                 }
 
             }
         }
 
-        private static void SpawnUnit(GameObjectPool pool)
+        private static void SpawnUnit(GameObjectPool pool, string size)
         {
             GameObject enemy = pool.Rent(false);
             EnemyController enemyComponent = enemy.GetComponent<EnemyController>();
+            FindParentToSpawn(enemy, size);
 
             enemy.transform.position = Vector3.zero;
             enemy.SetActive(true);
@@ -130,6 +125,15 @@ namespace Enemies
             disabledUnits++;
             enemy.GetComponent<EmitOnDisable>().OnDisableGameObject -= EnemyDisabled;
             activeUnits.Remove(enemy);
+        }
+
+        private static void FindParentToSpawn(GameObject enemy, string size)
+        {
+            if (GameObject.Find("EnemyManager"))
+            {
+                if (GameObject.Find("BigEnemyUnit") && size.Equals("big")) { enemy.transform.parent = GameObject.Find("EnemyManager/BigEnemyUnit").transform; }
+                if (GameObject.Find("SmallEnemyUnit") && size.Equals("small")) { enemy.transform.parent = GameObject.Find("EnemyManager/SmallEnemyUnit").transform; }
+            }
         }
 
     }

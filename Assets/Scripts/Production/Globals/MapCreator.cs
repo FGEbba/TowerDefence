@@ -20,14 +20,15 @@ namespace MapCreation
     public class MapCreator : MonoBehaviour
     {
 
+        private static Dictionary<int, int[]> theMap = new Dictionary<int, int[]>();
         private static List<Vector3> accessableTiles = new List<Vector3>();
+
         public static Vector3 start { get; private set; }
         public static Vector3 end { get; private set; }
-
-        private static Dictionary<int, int[]> theMap = new Dictionary<int, int[]>();
         public static int BlockSize { get; private set; }
-        public static Dictionary<int, int[]> GetMapDictionary() { return theMap; }
         public static List<Vector3> GetAccessableTiles() { return accessableTiles; }
+
+
         #region Checkers
         public static List<MapData> CheckDataMaps(MapDataExposed[] mapDatas)
         {
@@ -123,8 +124,10 @@ namespace MapCreation
             if (currentTileType == TileType.Obstacle)
                 return "Obstacles/";
 
-            if (currentTileType == TileType.TowerOne || currentTileType == TileType.TowerTwo)
-                return "TowerUnits/";
+            if (currentTileType == TileType.TowerOne)
+                return "TowerUnits/TowerOneUnits";
+            if (currentTileType == TileType.TowerTwo)
+                return "TowerUnits/TowerTwoUnits";
 
             return "";
         }
